@@ -1,0 +1,26 @@
+{
+  "name": "bad-apple-mf",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Bad Apple module federation frames",
+  "main": "index.js",
+  "scripts": {
+    "frames:generate": "node scripts/generate-frames.mjs",
+    "frames:patch": "node scripts/patch-frame-assetprefix.mjs",
+    "frames:build": "pnpm -r --filter \"./apps/frames/*\" build",
+    "frames:build:all": "node scripts/build-frames.mjs --start=1 --concurrency=8",
+    "frames:build:all:rs": "cargo run --manifest-path tools/framectl/Cargo.toml --release -- build --start=1 --concurrency=8 --silent=1",
+    "frames:serve": "node scripts/serve-frames.mjs",
+    "host:dev": "pnpm --filter host dev",
+    "host:build": "pnpm --filter host build",
+    "dev": "pnpm host:dev",
+    "build": "pnpm host:build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "packageManager": "pnpm@10.26.1",
+  "devDependencies": {
+    "pngjs": "^7.0.0"
+  }
+}
