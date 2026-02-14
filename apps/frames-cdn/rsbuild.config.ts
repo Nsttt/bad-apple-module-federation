@@ -2,7 +2,7 @@ import { defineConfig } from '@rsbuild/core';
 import { withZephyr } from 'zephyr-rsbuild-plugin';
 
 export default defineConfig(
-  withZephyr({
+  {
     server: {
       port: 4173,
     },
@@ -15,6 +15,6 @@ export default defineConfig(
         index: './src/index.ts',
       },
     },
-  }),
+    plugins: [withZephyr()],
+  },
 );
-

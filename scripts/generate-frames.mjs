@@ -164,7 +164,7 @@ function buildRsbuildConfig(id, port) {
     `import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';\n` +
     `import { defineConfig } from '@rsbuild/core';\n\n` +
     `import { withZephyr } from 'zephyr-rsbuild-plugin';\n\n` +
-    `export default defineConfig(withZephyr({\n` +
+    `export default defineConfig({\n` +
     `  output: {\n` +
     `    assetPrefix: '${assetPrefix}',\n` +
     `  },\n` +
@@ -184,6 +184,7 @@ function buildRsbuildConfig(id, port) {
     `      },\n` +
     `      shared: {},\n` +
     `    }),\n` +
+    `    withZephyr(),\n` +
     `  ],\n` +
     `  tools: {\n` +
     `    rspack: {\n` +
@@ -192,7 +193,7 @@ function buildRsbuildConfig(id, port) {
     `      },\n` +
     `    },\n` +
     `  },\n` +
-    `}));\n`
+    `});\n`
   );
 }
 
