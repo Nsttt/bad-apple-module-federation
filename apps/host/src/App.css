@@ -45,10 +45,11 @@ body {
 .frame-stage {
   width: var(--frame-width);
   height: var(--frame-height);
-  background: #f4f4f4;
-  border-radius: 6px;
+  /* Keep host chrome invisible; frame modules paint their own bg. */
+  background: transparent;
+  border-radius: 0;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 0;
   backface-visibility: hidden;
   transform-origin: center;
   will-change: transform;

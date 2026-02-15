@@ -129,7 +129,8 @@ const App = () => {
 
       // Fix thin "seam" lines that can appear when scaling huge box-shadow
       // layers (our pixels). Integer upscales are the most reliable fix.
-      const scale = raw >= 1 ? Math.floor(raw) : raw;
+      // Use ceil so it "fills" more aggressively (may crop slightly).
+      const scale = raw >= 1 ? Math.ceil(raw) : raw;
 
       document.documentElement.style.setProperty(
         '--stage-scale',
