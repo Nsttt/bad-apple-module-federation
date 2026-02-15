@@ -2,10 +2,7 @@
 
 Monorepo with one host and many module federation remotes (one per frame). Remotes export HTML + CSS payloads and are loaded at runtime.
 
-## Disclaimer
-
 “Bad Apple!!” is a well-known Touhou Project fan PV (shadow art) set to the song “Bad Apple!!”.
-This repo is a technical demo (Module Federation + CSS-only frame remotes).
 
 Video: `https://www.youtube.com/watch?v=FtutLA63Cp8`
 
