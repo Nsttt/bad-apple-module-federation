@@ -72,6 +72,7 @@ const resolveRemoteUrl = (frameId: string, bust: number) => {
 const App = () => {
   const stageRef = useRef<HTMLDivElement>(null);
   const stageShellRef = useRef<HTMLElement>(null);
+  const controlsRef = useRef<HTMLElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const frameIndexRef = useRef(0);
   const rafRef = useRef<number | null>(null);
@@ -117,11 +118,18 @@ const App = () => {
       const w = shell.clientWidth;
       const h = shell.clientHeight;
 
-      // Leave a little breathing room inside the panel.
-      const pad = 36;
-      const sx = (w - pad) / frameWidth;
-      const sy = (h - pad) / frameHeight;
-      const scale = Math.max(0.1, Math.min(8, Math.min(sx, sy)));
+      // Use nearly all of the viewport. Only reserve space for the bottom
+      // controls overlay so the video can scale up.
+      const padX = 12;
+      const padY = 12;
+      const sx = (w - padX * 2) / frameWidth;
+      // Let the video scale behind the overlay; keeps it as large as possible.
+      const sy = (h - padY * 2) / frameHeight;
+      const raw = Math.max(0.1, Math.min(32, Math.min(sx, sy)));
+
+      // Fix thin "seam" lines that can appear when scaling huge box-shadow
+      // layers (our pixels). Integer upscales are the most reliable fix.
+      const scale = raw >= 1 ? Math.floor(raw) : raw;
 
       document.documentElement.style.setProperty(
         '--stage-scale',
@@ -277,47 +285,26 @@ const App = () => {
 
   return (
     <div className="app-shell">
-      <div className="app-card">
-        {audioUrl ? (
-          <audio
-            className="audio-el"
-            ref={audioRef}
-            src={audioUrl}
-            preload="auto"
-            muted={muted}
-            onCanPlay={() => setAudioReady(true)}
-            onError={() => setError(`audio load failed: ${audioUrl}`)}
-          />
-        ) : null}
-        <header className="app-header">
-          <div>
-            <div className="eyebrow">Bad Apple / Module Federation</div>
-            <h1>Frame Swarm Host</h1>
-            <p className="subhead">
-              Every frame is a remote. Runtime loads + unloads CSS-only payloads.
-            </p>
-          </div>
-          <div className="status">
-            <div>{playing ? `Playing @ ${fps}fps` : 'Paused'}</div>
-            <div>{loading ? 'Loading...' : 'Ready'}</div>
-            {audioUrl ? (
-              <div>{audioReady ? 'Audio: ready' : 'Audio: loading'}</div>
-            ) : (
-              <div>Audio: off</div>
-            )}
-          </div>
-        </header>
+      {audioUrl ? (
+        <audio
+          className="audio-el"
+          ref={audioRef}
+          src={audioUrl}
+          preload="auto"
+          muted={muted}
+          onCanPlay={() => setAudioReady(true)}
+          onError={() => setError(`audio load failed: ${audioUrl}`)}
+        />
+      ) : null}
 
-        <section className="panel stage" ref={stageShellRef}>
-          <div className="frame-stage" ref={stageRef} />
-          {error ? (
-            <div className="stage-hud">
-              {error ? <div className="error">{error}</div> : null}
-            </div>
-          ) : null}
-        </section>
+      <main className="stage" ref={stageShellRef}>
+        <div className="frame-stage" ref={stageRef} />
+        {error ? <div className="error-banner">{error}</div> : null}
+      </main>
 
-        <section className="panel controls">
+      {/* ref used to reserve scale room for overlay */}
+      <footer className="controls-bar" ref={controlsRef}>
+        <div className="controls-row">
           <button onClick={playing ? pause : play}>
             {playing ? 'Pause' : 'Play'}
           </button>
@@ -329,6 +316,16 @@ const App = () => {
           <button className="ghost" onClick={stepFrame}>
             Step
           </button>
+          <div className="status-mini">
+            <span>{playing ? `${fps}fps` : 'Paused'}</span>
+            <span>{loading ? 'Loading' : 'Ready'}</span>
+            {audioUrl ? (
+              <span>{audioReady ? 'Audio' : 'Audio...'}</span>
+            ) : null}
+          </div>
+        </div>
+
+        <div className="controls-row">
           <div className="scrub">
             <input
               type="range"
@@ -338,12 +335,13 @@ const App = () => {
               onChange={onScrub}
             />
             <div className="scrub-meta">
-              Frame {padFrame(frameIndex + 1)} / {padFrame(frameCount)}
+              {padFrame(frameIndex + 1)} / {padFrame(frameCount)}
             </div>
           </div>
+
           {audioUrl ? (
             <label className="volume">
-              <div className="volume-label">Volume</div>
+              <div className="volume-label">Vol</div>
               <input
                 type="range"
                 min={0}
@@ -355,11 +353,12 @@ const App = () => {
               <div className="volume-meta">{Math.round(volume * 100)}%</div>
             </label>
           ) : null}
+
           <div className="meta">
             {frameWidth}x{frameHeight}
           </div>
-        </section>
-      </div>
+        </div>
+      </footer>
     </div>
   );
 };

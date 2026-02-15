@@ -103,7 +103,8 @@ function buildPixelCss(id, points, cols, rows) {
     `  left: 0;\n` +
     `  width: ${dotW}px;\n` +
     `  height: ${dotH}px;\n` +
-    `  background: #111;\n` +
+    // NOTE: keep the origin element invisible; points are rendered via box-shadow.
+    `  background: transparent;\n` +
     `}\n` +
     chunks
       .map((chunk, idx) => {
