@@ -7,6 +7,7 @@
   "scripts": {
     "frames:generate": "node scripts/generate-frames.mjs",
     "frames:patch": "node scripts/patch-frame-assetprefix.mjs",
+    "frames:patch:external-runtime": "node scripts/patch-frames-external-runtime.mjs",
     "frames:patch:origin-pixel": "node scripts/patch-frames-remove-origin-pixel.mjs",
     "frames:strip:zephyr": "node scripts/strip-zephyr-from-frames.mjs",
     "frames:build": "pnpm -r --filter \"./apps/frames/*\" build",

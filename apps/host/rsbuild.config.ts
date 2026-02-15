@@ -17,6 +17,11 @@ export default defineConfig({
       remotes: {},
       // No shared deps needed: remotes are CSS/DOM-only.
       shared: {},
+      experiments: {
+        // Remotes can be built with `experiments.externalRuntime: true` so they
+        // don't each bundle an MF runtime. Host provides the external runtime.
+        provideExternalRuntime: true,
+      },
     }),
   ],
 });

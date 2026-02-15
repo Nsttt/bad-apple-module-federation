@@ -189,6 +189,10 @@ function buildRsbuildConfig(id, port) {
     `        './Frame': './src/frame.js',\n` +
     `      },\n` +
     `      shared: {},\n` +
+    `      experiments: {\n` +
+    `        // Use the host's MF runtime (see host: provideExternalRuntime).\n` +
+    `        externalRuntime: true,\n` +
+    `      },\n` +
     `    }),\n` +
     zephyrPlugin +
     `  ],\n` +
